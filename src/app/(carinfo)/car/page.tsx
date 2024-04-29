@@ -62,5 +62,3 @@ export default async function Car() {
         </main>
     )
 }
-
-//<h1 className="text-right p-10">Search Restaurants</h1>

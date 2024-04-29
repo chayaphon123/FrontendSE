@@ -1,5 +1,5 @@
 export default async function postMenuReview(token:string,resId:string,menuId:string,rating:string,comment:string) {
-    const response = await fetch(process.env.BACKEND_URL + `/api/v1/restaurants/${resId}/menus/${menuId}/menureviews`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/v1/restaurants/${resId}/menus/${menuId}/menureviews`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

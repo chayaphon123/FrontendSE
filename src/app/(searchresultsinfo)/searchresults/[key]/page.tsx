@@ -30,5 +30,3 @@ export default async function SearchDetailPage( {params}:{params:{key:string}}) 
         </main>
     )
 }
-
-//<h1 className="text-right p-10">Search Restaurants</h1>

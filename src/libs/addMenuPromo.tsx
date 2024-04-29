@@ -1,5 +1,5 @@
 export default async function postMenuPromotion(token:string,name:string,detail:string,resId:string,startD:string,endD:string,menuId:string) {
-    const response = await fetch(process.env.BACKEND_URL + `/api/v1/promotions`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/v1/promotions`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
