@@ -9,7 +9,7 @@ import ReviewCatalog from "@/components/ReviewCatalog";
 import postReview from "@/libs/postReview";
 import PromotionCatalog from "@/components/PromotionCatalog";
 import Link from "next/link";
-import { PromotionItem, ReviewItem } from "../../../../../interfaces";
+import { MenuItem, PromotionItem, ReviewItem, menureviewsItem } from "../../../../../interfaces";
 import PromotionCard from "@/components/PromotionCard";
 import { Rating} from "@mui/material";
 import getMenus from "@/libs/getMenu";
@@ -82,11 +82,18 @@ export default async function CarDetailPage({ params }: { params: { cid: string 
             </div>
         );
     };
+    const calculateMenuAverageRating = (reviews: menureviewsItem[]) => {
+        const totalRating = reviews.reduce((acc, current) => {
+            const rating = current.rating;
+            return acc + rating;
+        }, 0);
 
+        return reviews.length > 0 ? (totalRating / reviews.length) : 0;
+    };
     const findMaxRating = (menu: MenuItem[]) => {
         let maxRat = 0;
         for (let i = 0; i < menu.length; i++) { 
-            const averageRatingtd = calculateAverageRating(menu[i].menureviews);
+            const averageRatingtd = calculateMenuAverageRating(menu[i].menureviews);
             if (maxRat < averageRatingtd) { 
                 maxRat = averageRatingtd;
             }
@@ -98,7 +105,7 @@ export default async function CarDetailPage({ params }: { params: { cid: string 
 
     const findRecommended = (menu: MenuItem[]) => {
         for (let i = 0; i < menu.length; i++) { 
-            const averageRatingtd = calculateAverageRating(menu[i].menureviews);
+            const averageRatingtd = calculateMenuAverageRating(menu[i].menureviews);
             if (averageRatingtd === maxRating) { 
                 return menu[i];
             }

@@ -97,8 +97,8 @@ export interface MenuItem {
     name: string,
     price: number,
     restaurant: string,
-    menureviews: menureviewsItem,
-    promotions: menupromotionsItem,
+    menureviews: menureviewsItem[],
+    promotions: PromotionItem[],
     id: string
 }
 

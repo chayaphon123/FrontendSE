@@ -1,7 +1,7 @@
 import { Rating } from '@mui/material';
 import { Link } from '@mui/material';
 import getMenus from '@/libs/getMenu';
-import { PromotionItem, ReviewItem, menupromotionsItem ,MenuItem } from "../../interfaces";
+import { PromotionItem, ReviewItem, menupromotionsItem ,MenuItem, menureviewsItem } from "../../interfaces";
 
 export default async function MenuCard( {name,price,resID,menuID} : {name: string, price: number,resID: string, menuID: string } ) { 
 
@@ -11,14 +11,15 @@ export default async function MenuCard( {name,price,resID,menuID} : {name: strin
                 return menu[i];
             }
         }
+        throw new Error(`No menu item found`);
     };
 
     const menudata = await getMenus(resID);
-    const thismenudata = await findPromotion(menudata.data);
+    const thismenudata = findPromotion(menudata.data);
 
-    const calculateAverageRating = (reviews: ReviewItem[]) => {
+    const calculateAverageRating = (reviews: menureviewsItem[]) => {
         const totalRating = reviews.reduce((acc, current) => {
-            const rating = parseFloat(current.rating);
+            const rating = current.rating;
             return acc + rating;
         }, 0);
 
@@ -33,7 +34,7 @@ export default async function MenuCard( {name,price,resID,menuID} : {name: strin
                     <span className='block font-bold text-lg'>{name}</span>
                     <span className="absolute inset-y-0 right-0 flex items-center mr-5">
                         <span className='p-[5px] font-bold text-red-600 text-lg mr-5'>{price} ฿</span>
-                        <Rating name="half-rating-read mr-5" defaultValue={averageRating} precision={0.5} sx={{color: 'red'}} readOnly />
+                        <Rating name="half-rating-read mr-5" defaultValue={parseFloat(averageRating)} precision={0.5} sx={{color: 'red'}} readOnly />
                         <span className='p-[5px] font-bold text-red-600 text-lg mr-5'></span>
                         <Link href={`/menu/${name}/${resID}/${menuID}`} >
                             <button className="block rounded-md bg-lime-700 hover:bg-lime-950 px-3 py-2 text-white mr-5 ">

@@ -2,8 +2,6 @@ import getCars from "@/libs/getCars"
 import CarCatalog from "@/components/CarCatalog"
 import { Suspense } from "react"
 import { LinearProgress } from "@mui/material"
-import { RestaurantJson } from "../../../../../../../interfaces"
-import { Link } from '@mui/material';
 import getSearch from "@/libs/getSearch"
 import { redirect } from "next/navigation";
 
@@ -62,3 +60,5 @@ export default async function SearchDetailPage( {params}:{params:{key:string,min
         </main>
     )
 }
+
+//<h1 className="text-right p-10">Search Restaurants</h1>

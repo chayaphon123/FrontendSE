@@ -4,12 +4,8 @@ import { authOptions } from "@/libs/auth";
 import getUserProfile from "@/libs/getUserProfile";
 import reservation from "@/libs/reservation";
 import { redirect } from "next/navigation";
-import getReview from "@/libs/getReview";
-import ReviewCatalog from "@/components/ReviewCatalog";
-import postReview from "@/libs/postReview";
-import PromotionCatalog from "@/components/PromotionCatalog";
 import Link from "next/link";
-import { PromotionItem, ReviewItem, menupromotionsItem ,MenuItem } from "../../../../../../../interfaces";
+import { menupromotionsItem ,MenuItem, MenuJson, menureviewsItem, RestaurantJson, RestaurantItem, PromotionItem } from "../../../../../../../interfaces";
 import PromotionCard from "@/components/PromotionCard";
 import { Rating} from "@mui/material";
 import getMenus from "@/libs/getMenu";
@@ -29,10 +25,12 @@ export default async function MenuDetailPage({ params }: { params: { name: strin
                 return menu[i];
             }
         }
+        throw new Error(`No menu item found with name ${params.name}`);
     };
 
-    const menudata = await getMenus(params.restaurantId);
-    const thismenudata = await findPromotion(menudata.data);
+
+    const menudata: MenuJson = await getMenus(params.restaurantId);
+    const thismenudata: MenuItem = findPromotion(menudata.data);
 
 
     const comment = async (addUserForm: FormData) => {
@@ -45,9 +43,9 @@ export default async function MenuDetailPage({ params }: { params: { name: strin
         redirect(`/menu/${params.name}/${params.restaurantId}//${params.menuId}`)
     } 
 
-    const calculateAverageRating = (reviews: ReviewItem[]) => {
+    const calculateAverageRating = (reviews: menureviewsItem[]) => {
         const totalRating = reviews.reduce((acc, current) => {
-            const rating = parseFloat(current.rating);
+            const rating = current.rating;
             return acc + rating;
         }, 0);
 
@@ -57,13 +55,13 @@ export default async function MenuDetailPage({ params }: { params: { name: strin
 
     const totalRating = thismenudata.menureviews.length;
 
-    const countReviewsWithRating = (reviews: ReviewItem[], targetRating: number): number => {
+    const countReviewsWithRating = (reviews: menureviewsItem[], targetRating: number): number => {
         return reviews.reduce((acc, review) => {
-            const rating = parseFloat(review.rating);
+            const rating = review.rating;
             return acc + (rating === targetRating ? 1 : 0);
         }, 0);
     };
-    const HorizontalBars = ({ reviews }:{reviews:ReviewItem[]}) => {
+    const HorizontalBars = ({ reviews }:{reviews:menureviewsItem[]}) => {
     
         return (
             <div className="flex flex-col w-[15%] px-2">
@@ -219,9 +217,9 @@ export default async function MenuDetailPage({ params }: { params: { name: strin
             </div>
                     <div style={{margin: "20px",display: "flex",flexDirection: "row",overflowX: "auto",
                     padding: "20px",scrollbarWidth: "thin",scrollbarColor: "red lightgrey"}}>
-                        {thismenudata.menureviews.map((reviewItem:ReviewItem) => (   
+                        {thismenudata.menureviews.map((reviewItem:menureviewsItem) => (   
                             <div style={{ padding: "10px" }}>          
-                            <ReviewCard comment={reviewItem.comment} rating={reviewItem.rating} />
+                            <ReviewCard comment={reviewItem.comment} rating={reviewItem.rating.toString()} />
                             </div>
                         ))}
                     </div>
